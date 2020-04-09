@@ -1,0 +1,28 @@
+{
+  "name": "chatty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranciscoDadone/ChattyWeb.git"
+  },
+  "author": "Francisco Dadone",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranciscoDadone/ChattyWeb/issues"
+  },
+  "homepage": "https://github.com/FranciscoDadone/ChattyWeb#readme",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "express": "^4.17.1",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
