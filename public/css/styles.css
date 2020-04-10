@@ -1,0 +1,18 @@
+#backgroundRegister {
+   
+    background-color: #21D4FD;
+    background: linear-gradient(19deg, rgba(33, 213, 253, 0.603) 0%, rgba(185, 33, 255, 0.616) 100%),  url("../img/background.jpg");
+
+    background-size: cover;
+    background-repeat: no-repeat;
+} 
+.full-height {
+    height: 100% !important;
+}
+
+html, body {
+    height: 100% !important;
+}
+.parent {
+    display:flex;
+  }
