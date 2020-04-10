@@ -1,11 +1,16 @@
-#backgroundRegister {
-   
-    background-color: #21D4FD;
-    background: linear-gradient(19deg, rgba(33, 213, 253, 0.603) 0%, rgba(185, 33, 255, 0.616) 100%),  url("../img/background.jpg");
+body {
+    background-color: #21D4FD !important;
+    background: linear-gradient(19deg, rgba(33, 213, 253, 0.603) 0%, rgba(185, 33, 255, 0.616) 100%),  url("../img/background.jpg") !important;
+    
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
 
-    background-size: cover;
-    background-repeat: no-repeat;
-} 
+html {
+    background: rgb(29,142,180);
+    background: radial-gradient(horizontal, rgba(29,142,180,1) 60%, #1f628faf 100%);
+}
+
 .full-height {
     height: 100% !important;
 }
@@ -15,4 +20,23 @@ html, body {
 }
 .parent {
     display:flex;
-  }
+}
+
+.bg-form {
+    background-color: rgba(54, 54, 54, 0.719);
+    padding: 2rem;
+    margin: 0;
+    border-radius: 1em;
+}
+
+.chatty-img-512 {
+    background: url("../img/appicon_512.png") !important;
+    background-repeat: no-repeat !important;
+    background-position: left !important;
+    padding-right: 0;
+}
+
+.margin-top {
+    margin-top: 1em !important;
+}
+
