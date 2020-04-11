@@ -2,14 +2,12 @@ const MongoClient = require('mongodb').MongoClient;
 const url = require('../config/keys').mongoURI;
 const bcrypt = require('bcrypt');
 
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-
 
 
 
 //Handle generate a new user with a unique ID
 function registerNewUser(username, email, password) {
-
+    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
     try {
 
         client.connect((err) => {    
@@ -66,6 +64,7 @@ function registerNewUser(username, email, password) {
 
 //Handle if there is an email already registered in the database
 function isAlreadyRegistered(email, callback) {
+    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
     try {
 
         client.connect((err) => {
@@ -90,6 +89,7 @@ function isAlreadyRegistered(email, callback) {
 }
 
 function loginAuth(username, password, callback) {
+    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
     try {
 
         client.connect((err) => {
