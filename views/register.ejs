@@ -16,28 +16,27 @@
       <img src="img/appicon_512.png" class="img-responsive img-fluid" alt="chatty logo">
     </div>
     <div class="col-md-6">
-      <form class="bg-form">
+      <form class="bg-form" action="/register" method="POST">
         <div class="form-group">
 
           <h2 class="text-white">Register a new account!</h2>
           <br>
-
           <h6 class="text-white">Enter your username</h6>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">@</div>
             </div>
-            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
+            <input type="text" value="<% typeof username != 'undefined' ? username : '' %>" class="form-control" id="username" name="username" placeholder="Username">
           </div>
           <h6 class="text-white">Email adress</h6>
-          <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="you@email.com">
+          <input type="email" value="<% typeof email != 'undefined' ? email : '' %>" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="you@email.com">
           </div>
           <br>
         <div class="form-group">
           <h6 class="text-white">Password</h6>
-          <input type="password" class="form-control">
+          <input type="password" id="password" name="password" class="form-control">
           <h6 class="text-white">Repeat your password</h6>
-          <input type="password" class="form-control">
+          <input type="password" id="password2" name="password2" class="form-control">
           <a href="/passwordRecovery">¿Forgot your password?</a>
         </div>
         <br>
