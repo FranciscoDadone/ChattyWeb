@@ -16,25 +16,40 @@
           <img src="img/appicon_512.png" class="img-responsive img-fluid" alt="chatty logo">
       </div>
       <div class="col-md-6">
-        <form class="bg-form">
+        <form class="bg-form" action="/login" method="POST">
           <div class="form-group">
   
             <h2 class="text-white">Log-in to your account!</h2>
             <br>
 
-            <% if(register_success) { %>
+            <% 
+            try {            
+              if(register_success) { %>
 
-              <div class="alert alert-success">
-                Successfully registered! Log into your account!
-              </div>
+                <div class="alert alert-success">
+                  Successfully registered! Log into your account!
+                </div>
 
-            <% } %>
+              <% } %>
+            <% } catch(err) { register_success: false } %>
+              
+            <% try {
+
+              if(errors.length > 0) { %>
+                <div class="alert alert-danger">
+                  <% for(let i = 0; i < errors.length; i++) { %>
+                    <%= errors[i].msg %>
+                   <% } %>
+                </div>
+            <% } 
+
+            } catch(err) {} %>
   
             <h6 class="text-white">Username or email</h6>
-            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username or email">
+            <input type="text" value="<% typeof username != 'undefined' ? username : '' %>" class="form-control" id="username" name="username" placeholder="Username or email">
             <br>
             <h6 class="text-white">Password</h6>
-            <input type="password" class="form-control">
+            <input type="password" id="password" name="password" class="form-control">
             <a href="/passwordRecovery">¿Forgot your password?</a>    
         </div>
             

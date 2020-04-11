@@ -1,17 +1,18 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = require('../config/keys').mongoURI;
+const bcrypt = require('bcrypt');
 
 const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-//Handle generate a unique id for that username
 
+
+
+//Handle generate a new user with a unique ID
 function registerNewUser(username, email, password) {
 
     try {
 
-        client.connect((err) => {
-            if(err) throw err;
-    
+        client.connect((err) => {    
             //Generating user ID
             var generatedUserID = Math.ceil(Math.random(1000,9000)*10000);
             try {
@@ -30,13 +31,9 @@ function registerNewUser(username, email, password) {
                         });
                 }
                 generateId();
-    
             } catch(err) {
                 console.log(err);
             }
-            
-    
-            
     
             // Handle register user
             try {
@@ -50,9 +47,10 @@ function registerNewUser(username, email, password) {
                         email: email,
                         password: password
                     }, (err) => {
+                        if (err) throw err;
                         console.log('New user registered: ', username, "#",generatedUserID);
                     });
-    
+                    client.close();
     
             } catch(err) {
                 console.log(err);
@@ -68,13 +66,11 @@ function registerNewUser(username, email, password) {
 
 //Handle if there is an email already registered in the database
 function isAlreadyRegistered(email, callback) {
-    var emailInUse;
     try {
 
         client.connect((err) => {
             const db = client.db('Chatty');
             
-
             db.collection('Users').findOne({
                 email: email
             }, (err, value) => {
@@ -85,13 +81,49 @@ function isAlreadyRegistered(email, callback) {
                 }
                 
             });
+            //client.close();
         });
         
-
     } catch(err) {
         console.log("Error connecting to database: ", err);
-    } finally {
-        client.close();
+    }
+}
+
+function loginAuth(username, password, callback) {
+    try {
+
+        client.connect((err) => {
+            const db = client.db('Chatty');
+
+            db.collection('Users').findOne({
+                username: username
+            }, (err, value) => {
+                if(value != null) {
+                    bcrypt.compare(password, value.password, function(err, result) {
+                        console.log(result);
+                        callback(result);
+                    });
+                } else {
+                    db.collection('Users').findOne({
+                        email: username
+                    }, (err, value1) => {
+                        if(value1 != null) {
+                            bcrypt.compare(password, value1.password, function(err, result) {
+                                console.log(result);
+                                callback(result);
+                            });
+                        } else {
+                            console.log("else");
+                            callback(false);
+                        }
+                    });
+                }
+            });
+            client.close();
+        });
+    } catch(err) {
+        console.log("Error connecting to database: ", err);
+        callback(false);
     }
 }
 
@@ -103,5 +135,4 @@ function isAlreadyRegistered(email, callback) {
 
 
 
-
-module.exports = { registerNewUser, isAlreadyRegistered };
+module.exports = { registerNewUser, isAlreadyRegistered, loginAuth };

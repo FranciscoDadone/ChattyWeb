@@ -4,7 +4,6 @@ const logger = require('./middlewares/logger');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const flash = require('connect-flash');
 
 const PORT = process.env.PORT || 5000;
 

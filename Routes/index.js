@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../classes/User');
 const bcrypt = require('bcrypt');
 const DatabaseHandler = require('./../controller/DatabaseHandler');
 
 //Home page
 router.get('/', (req, res) => {
-    res.render('welcome', {
-        title: 'Chatty'
+    res.render('login', {
+        title: 'Chatty - Login',
     });
 });
 
@@ -15,7 +14,6 @@ router.get('/', (req, res) => {
 router.get('/login', (req, res) => {
     res.render('login', {
         title: 'Chatty - Login',
-        register_success: false
     });
 });
 
@@ -29,14 +27,14 @@ router.get('/register', (req, res) => {
     });
 });
 
-//Register handle
+//Register handler -----------------------------------------------------------------------
 router.post('/register', (req, res) => {
     let errors = [];
     const { username, email, password, password2 } = req.body;
 
     //Check required fields
     if(!email || !username || !password || !password2) {
-        errors.push({ msg: 'Please fill all fields.' });
+        errors.push({ msg: '<!> Please fill all fields.' });
     }
 
     // Check password match
@@ -60,7 +58,6 @@ router.post('/register', (req, res) => {
         //If there is any error it will prompt it and don´t generate the new account 
         if(errors.length > 0) {
             res.render('register', {
-                page: 'register',
                 title: 'Chatty - Registro',
                 errors,
                 username,
@@ -90,7 +87,37 @@ router.post('/register', (req, res) => {
     });
 
 });
+// END OF: Register handler -----------------------------------------------------------------------
 
+//Login Handler
+router.post('/login', (req, res) => {
+    let errors = [];
+    const { username, password } = req.body;
+    
+    if(username == null || password == null) {
+        errors.push("<!> Please fill all fields");
+    }
+    
+    DatabaseHandler.loginAuth(username, password, (isAuth) => {
+        
+        console.log(isAuth);
+        if(isAuth) {
+            res.render('home');
+        } else {
+            errors.push({ msg: "<!> Username or password incorrect." });
+        }
+        if(errors.length > 0) {
+            console.log("User error at login: ", errors);
+            res.render('login', {
+                title: 'Chatty - Login',
+                errors,
+                username
+            });
+        }  
+    });
+
+
+});
 
 
 module.exports = router;
