@@ -1,0 +1,4 @@
+MongoDB
+
+- Database: 'Chatty'
+- Collections: 'Users'

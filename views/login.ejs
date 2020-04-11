@@ -19,8 +19,16 @@
         <form class="bg-form">
           <div class="form-group">
   
-            <h2 class="text-white">Log-in to yout account!</h2>
+            <h2 class="text-white">Log-in to your account!</h2>
             <br>
+
+            <% if(register_success) { %>
+
+              <div class="alert alert-success">
+                Successfully registered! Log into your account!
+              </div>
+
+            <% } %>
   
             <h6 class="text-white">Username or email</h6>
             <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username or email">

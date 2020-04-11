@@ -3,19 +3,12 @@ const path = require('path');
 const logger = require('./middlewares/logger');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-
-//DB config
-const db = require('./config/keys').mongoURI;
-
-//Connect to mongo
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Mongo database connected.'))
-    .catch(err => console.log(err));
-
-
 
 // EJS
 app.use(expressLayouts);
@@ -26,6 +19,13 @@ app.use(express.urlencoded({ extended: false }));
 
 // Init logger middleware
 app.use(logger);
+
+//Express Session middleware
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
 
 //Index route
 app.use('/', require('./Routes/index'));

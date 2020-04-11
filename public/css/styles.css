@@ -1,9 +1,9 @@
 body {
     background-color: #21D4FD !important;
     background: linear-gradient(19deg, rgba(33, 213, 253, 0.603) 0%, rgba(185, 33, 255, 0.616) 100%),  url("../img/background.jpg") !important;
-    
     background-size: cover !important;
     background-repeat: no-repeat !important;
+
 }
 
 html {
@@ -29,13 +29,6 @@ html, body {
     border-radius: 1em;
 }
 
-.chatty-img-512 {
-    background: url("../img/appicon_512.png") !important;
-    background-repeat: no-repeat !important;
-    background-position: left !important;
-    padding-right: 0;
-}
-
 .margin-top {
     margin-top: 1em !important;
 }
@@ -52,4 +45,8 @@ html, body {
     .image_section img:first-child{
         display:none;
     }
+}
+
+.hr-white {
+    border: solid white 1px;
 }

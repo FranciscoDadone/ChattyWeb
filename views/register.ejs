@@ -21,6 +21,13 @@
 
           <h2 class="text-white">Register a new account!</h2>
           <br>
+          <% if(errors.length > 0) { %>
+            <div class="alert alert-danger">
+              <% for(let i = 0; i < errors.length; i++) { %>
+                  <%= errors[i].msg %>
+              <% } %>
+            </div>
+          <%}%>
           <h6 class="text-white">Enter your username</h6>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
