@@ -40,3 +40,16 @@ html, body {
     margin-top: 1em !important;
 }
 
+.back-arrow {
+    display: block;
+    text-indent: -9999px;
+    width: 4em;
+    height: 4em;
+    background: url('../img/back.svg');
+}
+
+@media (max-width:770px){
+    .image_section img:first-child{
+        display:none;
+    }
+}

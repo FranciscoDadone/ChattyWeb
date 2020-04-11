@@ -1,31 +1,19 @@
 <div class="container-fluid full-height">
-  <!-- SIDE NAVBAR -->
-    <nav class="navbar navbar-inverse navbar-fixed-left">
-        <div class="nav navbar-nav">
-          <nav class="navbar navbar-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </nav>
-            <div class="collapse" id="navbarToggleExternalContent">
-              <div class="bg-dark p-4">
-                <h5 class="text-white h4">Chatty</h5>
-                <h6 class="text-white h7">A simple chat application!</h6>
-                <br><br>
-                <span class="text-muted">Need and account?</span>
-                <a href="/register">Register</a>
-                <br>
-                <span class="text-muted">Already have an account?</span>
-                <a href="/login">Login</a>
-              </div>
-            </div>
-        </div>
+
+  <!-- BACK TO HOME -->
+  <nav class="navbar navbar-inverse navbar-fixed-left">
+    <div class="nav navbar-nav">
+      <nav class="navbar navbar-dark">
+        <a href="/" class="navbar-toggler" type="button">
+          <span class="navbar-toggler-icon"></span>
+        </a>
       </nav>
+  </nav>
 
 <div class="container-fluid margin-top">
   <div class="row">
-    <div class="col-md-6 chatty-img-512">
-      
+    <div class="col-md-6 image_section">
+      <img src="img/appicon_512.png" class="img-responsive img-fluid" alt="chatty logo">
     </div>
     <div class="col-md-6">
       <form class="bg-form">
@@ -50,13 +38,14 @@
           <input type="password" class="form-control">
           <h6 class="text-white">Repeat your password</h6>
           <input type="password" class="form-control">
+          <a href="/passwordRecovery">¿Forgot your password?</a>
         </div>
-        <button type="submit" class="btn btn-primary">Send!</button>
+        <br>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a href="/login">¿Already have an account? <b>Log-in</b></a>
       </form>
     </div>
   </div>
 </div>
-
-
-
+</div>
 </div>
