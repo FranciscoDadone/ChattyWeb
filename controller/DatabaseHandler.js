@@ -1,63 +1,42 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = require('../config/keys').mongoURI;
 const bcrypt = require('bcrypt');
+let UserModel = require('./models/User');
 
 const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //Handle generate a new user with a unique ID
 function registerNewUser(username, email, password) {
-    
-    try {
 
-        client.connect((err) => {    
-            //Generating user ID
-            var generatedUserID = Math.ceil(Math.random(1000,9000)*10000);
-            try {
-    
-                function generateId() {
-                    const db = client.db('Chatty');
-    
-                        db.collection('Users').findOne({
-                            ID: generatedUserID,
-                            username: username
-                        }, (err, value) => {
-    
-                            if(value != null){
-                                generateId();
-                            }
-                        });
-                }
-                generateId();
-            } catch(err) {
-                console.log(err);
-            }
-    
-            // Handle register user
-            try {
-    
-                const db = client.db('Chatty');
-    
-                    db.collection('Users').insertOne({    //Inserting a user credentials to database
-                        ID: generatedUserID,
-                        date: Date.now,
-                        username: username,
-                        email: email,
-                        password: password
-                    }, (err) => {
-                        if (err) throw err;
-                        console.log('New user registered: ', username, "#",generatedUserID);
-                    });
-                    client.close();
-    
-            } catch(err) {
-                console.log(err);
+    generateID = () => {
+        var generatedUserID = Math.ceil(Math.random(1000,9000)*10000);
+        
+        UserModel.model('User').find({ ID: generatedUserID }, (err, value) => {
+            if(value != null || value.length != 4) {
+                generateID();
+            } else {
+                return generatedUserID;
             }
         });
-
-    } catch(err) {
-        console.log("Error connecting to database: ", err);
+        return generatedUserID;
     }
+
+
+    let user = new UserModel({
+        ID: generateID(),
+        username: username,
+        email: email,
+        password: password,
+        registrationDate: Date.now()
+    });
+    user.save()
+    .then(doc => {
+        console.log('New user: ', doc);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
 }
 
@@ -65,78 +44,57 @@ function registerNewUser(username, email, password) {
 //Handle if there is an email already registered in the database
 function isAlreadyRegistered(email, callback) {
     
-    try {
+    UserModel.findOne({
+        email: email
+    }, (err, value) => {
+        if(err) console.log(err);
+        if(value != null) {
+            callback(true);
+        } else {
+            callback(false);
+        }
+    });
 
-        client.connect((err) => {
-            const db = client.db('Chatty');
-            
-            db.collection('Users').findOne({
-                email: email
-            }, (err, value) => {
-                if(value != null) {  
-                    callback(true);
-                } else {
-                    callback(false);
-                }
-                
-            });
-            //client.close();
-        });
-        
-    } catch(err) {
-        console.log("Error connecting to database: ", err);
-    }
 }
 
 function loginAuth(username, password, callback) {
    
-    try {
+    UserModel.findOne({
+        username: username
+    }, (err, value) => {
+        if(err) console.log(err);
 
-        client.connect((err) => {
-            const db = client.db('Chatty');
+        if(value != null) {
+            bcrypt.compare(password, value.password, function(err, result) {
+                if(err) console.log(err);
 
-            db.collection('Users').findOne({
-                username: username
-            }, (err, value) => {
-                if(value != null) {
-                    bcrypt.compare(password, value.password, function(err, result) {
+                if(result){
+                    callback(result, value);
+                } else {
+                    callback(result, {});
+                }
+            });
+        } else {
+            UserModel.findOne({
+                email: username
+            }, (err, value1) => {
+                if(err) console.log(err);
+
+                if(value1 != null) {
+                    bcrypt.compare(password, value1.password, function(err, result) {
                         if(result){
-                            callback(result, value);
+                            callback(result, value1);
                         } else {
                             callback(result, {});
                         }
                     });
                 } else {
-                    db.collection('Users').findOne({
-                        email: username
-                    }, (err, value1) => {
-                        if(value1 != null) {
-                            bcrypt.compare(password, value1.password, function(err, result) {
-                                if(result){
-                                    callback(result, value1);
-                                } else {
-                                    callback(result, {});
-                                }
-                            });
-                        } else {
-                            console.log("else");
-                            callback(false, {});
-                        }
-                    });
+                    callback(false, {});
                 }
-            });
-            //client.close();
-        });
-    } catch(err) {
-        console.log("Error connecting to database: ", err);
-    }
+            })
+        }
+    });
 }
-
-
-
-
-
-
 
 
 

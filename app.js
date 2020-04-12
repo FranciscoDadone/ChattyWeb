@@ -2,18 +2,30 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const morgan = require('morgan');
 const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 const url = require('./config/keys').mongoURI;
 const MongoDBStore = require('connect-mongodb-session')(session);
+const loginViaCookie = require('./middlewares/loginViaCookie');
+const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 
-// initialize cookie-parser to allow us access the cookies stored in the browser. 
-//app.use(cookieParser());
+// Connect to database (MongoDB)
+mongoose.connect(url, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+});
+//Get the default connection
+var db = mongoose.connection;
+
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('MongoDB Connected!');
+});
 
 
 // EJS
@@ -26,9 +38,13 @@ app.use(express.urlencoded({ extended: false }));
 // Init logger middleware
 app.use(morgan('dev'));
 
+//Cookie parser
+app.use(cookieParser({
+  secret: "secretCode"
+}));
 
 //MONGO 
-/*
+
 var store = new MongoDBStore({
     uri: url,
     collection: 'mySessions'
@@ -52,9 +68,9 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess));
 
-*/
 
 //Index route
+app.use("/", loginViaCookie);
 app.use('/', require('./Routes/index'));
 
 // Public folder

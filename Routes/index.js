@@ -2,46 +2,59 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const DatabaseHandler = require('./../controller/DatabaseHandler');
-const session = require('express-session');
-
+const loginCookie = require('../cookies/login-cookie');
+const loginViaCookie = require('../middlewares/loginViaCookie');
+const cookieParser = require('cookie-parser');
 
 
 //index page
 router.get('/', (req, res) => {
-    console.log(req.cookies);
-    res.render('login', {
-        title: 'Chatty - Login',
-    });
+    res.redirect('login');
 });
 
 //Home page
-router.get('/home', (req, res) => {
+router.get('/home', loginViaCookie, (req, res) => {
+    if(!req.isAuthenticated) {
+        res.redirect('/');
+    }
     res.render('home', {
-        title: 'Chatty'
+        title: 'Chatty',
+        email: req.email,
+        username: req.username
     })
 });
 
 //Logout
 router.post('/logout', (req, res) => {
-
+    res.clearCookie('auth');
+    res.redirect('/');
 });
 
+
 //Login page
-router.get('/login', (req, res) => {
-    res.render('login', {
-        title: 'Chatty - Login',
-        register_success: req.query.valid
-    });
+router.get('/login', loginViaCookie, (req, res) => {
+    if(!req.isAuthenticated) {
+        res.render('login', {
+            title: 'Chatty - Login',
+            register_success: req.query.valid
+        });
+    } else {
+        res.redirect('/home');
+    }
 });
 
 //Register page
-router.get('/register', (req, res) => {
-    let errors = [];
-    res.render('register', {
-        page: 'register',
-        title: 'Chatty - Register',
-        errors
-    });
+router.get('/register', loginViaCookie, (req, res) => {
+    if(!req.isAuthenticated) {
+        let errors = [];
+        res.render('register', {
+            page: 'register',
+            title: 'Chatty - Register',
+            errors
+        });
+    } else {
+        res.redirect('/home');
+    }
 });
 
 //Register handler -----------------------------------------------------------------------
@@ -116,10 +129,12 @@ router.post('/login', (req, res) => {
     
     DatabaseHandler.loginAuth(username, password, (isAuth, value) => {
         
-        console.log(isAuth);
         if(isAuth) {
-            res.cookie('userData', value);
-            res.render('home');
+            // ACA ES DONDE SE CARGA LA COOKIE DEL LOGIN HASHEADA      res.cookie('userData', value);
+            loginCookie.generateCookie(value, (hashedCookie) => {
+                res.cookie('auth', hashedCookie);
+                res.redirect('home');
+            });
         } else {
             errors.push({ msg: "<!> Username or password incorrect." });
         }
