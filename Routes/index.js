@@ -2,18 +2,35 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const DatabaseHandler = require('./../controller/DatabaseHandler');
+const session = require('express-session');
 
-//Home page
+
+
+//index page
 router.get('/', (req, res) => {
+    console.log(req.cookies);
     res.render('login', {
         title: 'Chatty - Login',
     });
+});
+
+//Home page
+router.get('/home', (req, res) => {
+    res.render('home', {
+        title: 'Chatty'
+    })
+});
+
+//Logout
+router.post('/logout', (req, res) => {
+
 });
 
 //Login page
 router.get('/login', (req, res) => {
     res.render('login', {
         title: 'Chatty - Login',
+        register_success: req.query.valid
     });
 });
 
@@ -76,11 +93,10 @@ router.post('/register', (req, res) => {
     
             }));
     
-            res.render('login', {
+            res.redirect('login?valid=true', 200, {
                 register_success: true,
                 title: 'Chatty - Login'
             });
-    
     
         }
 
@@ -89,7 +105,7 @@ router.post('/register', (req, res) => {
 });
 // END OF: Register handler -----------------------------------------------------------------------
 
-//Login Handler
+//Login Handler -----------------------------------------------------------------------
 router.post('/login', (req, res) => {
     let errors = [];
     const { username, password } = req.body;
@@ -98,10 +114,11 @@ router.post('/login', (req, res) => {
         errors.push("<!> Please fill all fields");
     }
     
-    DatabaseHandler.loginAuth(username, password, (isAuth) => {
+    DatabaseHandler.loginAuth(username, password, (isAuth, value) => {
         
         console.log(isAuth);
         if(isAuth) {
+            res.cookie('userData', value);
             res.render('home');
         } else {
             errors.push({ msg: "<!> Username or password incorrect." });
@@ -116,8 +133,11 @@ router.post('/login', (req, res) => {
         }  
     });
 
-
 });
+//END OF: Login Handler -----------------------------------------------------------------------
+
+
+
 
 
 module.exports = router;

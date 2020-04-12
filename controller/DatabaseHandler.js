@@ -100,8 +100,11 @@ function loginAuth(username, password, callback) {
             }, (err, value) => {
                 if(value != null) {
                     bcrypt.compare(password, value.password, function(err, result) {
-                        console.log(result);
-                        callback(result);
+                        if(result){
+                            callback(result, value);
+                        } else {
+                            callback(result, {});
+                        }
                     });
                 } else {
                     db.collection('Users').findOne({
@@ -109,21 +112,23 @@ function loginAuth(username, password, callback) {
                     }, (err, value1) => {
                         if(value1 != null) {
                             bcrypt.compare(password, value1.password, function(err, result) {
-                                console.log(result);
-                                callback(result);
+                                if(result){
+                                    callback(result, value1);
+                                } else {
+                                    callback(result, {});
+                                }
                             });
                         } else {
                             console.log("else");
-                            callback(false);
+                            callback(false, {});
                         }
                     });
                 }
             });
-            client.close();
+            //client.close();
         });
     } catch(err) {
         console.log("Error connecting to database: ", err);
-        callback(false);
     }
 }
 
