@@ -1,9 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = require('../config/keys').mongoURI;
 const bcrypt = require('bcrypt');
-let UserModel = require('./models/User');
-
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const UserModel = require('./models/User');
 
 
 //Handle generate a new user with a unique ID
@@ -22,13 +20,14 @@ function registerNewUser(username, email, password) {
         return generatedUserID;
     }
 
-
+    let newID = generateID();
     let user = new UserModel({
-        ID: generateID(),
+        ID: newID,
         username: username,
         email: email,
         password: password,
-        registrationDate: Date.now()
+        registrationDate: Date.now(),
+        usernameWithID: username + "#" + newID
     });
     user.save()
     .then(doc => {

@@ -1,0 +1,21 @@
+<div class="row">
+                                    <div class="col-md-2">
+                                        <img src="img/man-icon.png" class="friend-image" alt="">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <h6 class="margin-bottom text-white"><%-searchedFriends%></h6>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <p id="add-friend-text">Add friend!</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form method="post" action="/addFriend">
+                                                    <input type="hidden" name="name" value="value" /> 
+                                                    <a href="#" class="add-friend-anchor" onclick="this.parentNode.submit(); document.getElementById('add-friend-text').textContent='Friend added!';">
+                                                        <img src="img/plus.svg" class="add-friend" alt="Add a friend">
+                                                    </a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>

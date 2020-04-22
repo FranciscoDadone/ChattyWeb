@@ -50,3 +50,53 @@ html, body {
 .hr-white {
     border: solid white 1px;
 }
+
+.friends-tab {
+    background-color: #787878ad;
+    padding: 0.7em;
+    border-radius: 1em;
+    margin-bottom: 0.5em;
+}
+
+.margin-bottom {
+    margin-bottom: 0em;
+}
+
+.navbar-style {
+    background: radial-gradient(horizontal, rgba(29,142,180,1) 60%, #1f628faf 100%);
+}
+
+.navbar-img {
+    width: 3em;
+    height: 3em;
+}
+
+.friend-image {
+    width: 2em;
+    height: 2em;
+}
+
+.friends-anchor {
+    text-decoration: black !important;
+    text-decoration-color: white !important;
+    color: white !important;
+}
+
+.friends-anchor:hover .friends-tab {
+    background-color: #787878de;
+}
+
+.display-username-navbar {
+    background-color: rgba(218, 218, 218, 0.459);
+    padding: 0.7em;
+    border-radius: 1em;
+}
+
+.add-friend {
+    width: 2em;
+    height: 2em;
+}
+
+#add-friends-tab {
+    display: none;
+}

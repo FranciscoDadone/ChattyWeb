@@ -1,10 +1,8 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const morgan = require('morgan');
-const session = require('express-session');
 const mongoose = require('mongoose');
 const url = require('./config/keys').mongoURI;
-const MongoDBStore = require('connect-mongodb-session')(session);
 const loginViaCookie = require('./middlewares/loginViaCookie');
 const cookieParser = require('cookie-parser');
 
@@ -24,7 +22,7 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
-  console.log('MongoDB Connected!');
+  console.log('MongoDB Connected! at: ', url);
 });
 
 

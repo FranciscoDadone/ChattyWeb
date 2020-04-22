@@ -29,13 +29,30 @@ let User = new Mongoose.Schema({
         unique: false,
         default: "Invalid"
     },
+    friends: {
+        type: Array,
+        required: false,
+        unique: false
+    },
+    avatar: {
+        type: String,
+        required: false,
+        unique: false
+    },
     registrationDate: {
         type: Date,
         required: true,
         unique: false,
         delfault: Date.now()
     },
-    lastLogin: {type: Date}
+    usernameWithID: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    lastLogin: {
+        type: Date
+    }
     
 });
 

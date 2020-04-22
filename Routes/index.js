@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const DatabaseHandler = require('./../controller/DatabaseHandler');
 const loginCookie = require('../cookies/login-cookie');
 const loginViaCookie = require('../middlewares/loginViaCookie');
-
+const UserModel = require('../controller/models/User');
 
 const DAY_IN_MILLISECONDS = (1 * 24 * 60 * 60 * 1000);
 
@@ -19,11 +19,20 @@ router.get('/home', loginViaCookie, (req, res) => {
     if(!req.isAuthenticated) {
         res.redirect('/');
     }
-    res.render('home', {
-        title: 'Chatty',
+    
+    UserModel.findOne({
         email: req.email,
         username: req.username
-    })
+    }, (err, value) => {
+        if(err) console.log(err);
+        res.render('home', {
+            title: 'Chatty',
+            user: value,
+            UserModel: UserModel,
+            searchFriends: "",
+            addFriendsTab: false
+        })
+    });
 });
 
 //Logout
@@ -32,6 +41,24 @@ router.post('/logout', (req, res) => {
     res.redirect('/');
 });
 
+//POST Search friends
+router.post('/searchFriend', loginViaCookie, (req, res) => {
+    UserModel.findOne({
+        username: req.body.friendName
+    }, (err, value) => {
+        if(err) console.log(err);
+
+        if(value) {
+            res.render('home', {
+                title: 'Chatty',
+                UserModel: UserModel,
+                searchFriends: value.usernameWithID,
+                addFriendsTab: true,
+                user: req.user
+            });
+        }
+    });
+});
 
 //Login page
 router.get('/login', loginViaCookie, (req, res) => {
@@ -43,6 +70,12 @@ router.get('/login', loginViaCookie, (req, res) => {
     } else {
         res.redirect('/home');
     }
+});
+
+//Logout route
+router.get('/logout', (req, res) => {
+    res.clearCookie('auth');
+    res.redirect('/');
 });
 
 //Register page
@@ -77,6 +110,17 @@ router.post('/register', (req, res) => {
     //Check password lenght
     if(password.lenght < 6) {
         errors.push({ msg: '<!> Password should be at least 6 characters!' });
+    }
+
+    //Check if the username has extrange chracters
+    var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    if(username.match(format)){
+        errors.push({ msg: '<!> Extrange characters are not allowed in the username!' });
+    }
+
+    //Check username length
+    if(username.lenght > 10) {
+        errors.push({ msg: '<!> Username can only be 10 characters long!' });
     }
 
 
