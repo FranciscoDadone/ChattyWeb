@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt');
 const DatabaseHandler = require('./../controller/DatabaseHandler');
 const loginCookie = require('../cookies/login-cookie');
 const loginViaCookie = require('../middlewares/loginViaCookie');
-const cookieParser = require('cookie-parser');
+
+
+const DAY_IN_MILLISECONDS = (1 * 24 * 60 * 60 * 1000);
 
 
 //index page
@@ -132,7 +134,7 @@ router.post('/login', (req, res) => {
         if(isAuth) {
             // ACA ES DONDE SE CARGA LA COOKIE DEL LOGIN HASHEADA      res.cookie('userData', value);
             loginCookie.generateCookie(value, (hashedCookie) => {
-                res.cookie('auth', hashedCookie);
+                res.cookie('auth', hashedCookie, {maxAge: DAY_IN_MILLISECONDS * 1000});
                 res.redirect('home');
             });
         } else {

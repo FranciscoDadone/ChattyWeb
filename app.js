@@ -40,34 +40,8 @@ app.use(morgan('dev'));
 
 //Cookie parser
 app.use(cookieParser({
-  secret: "secretCode"
+  secret: 'secretCode'
 }));
-
-//MONGO 
-
-var store = new MongoDBStore({
-    uri: url,
-    collection: 'mySessions'
-});
-   
-  // Catch errors
-  store.on('error', function(error) {
-    console.log(error);
-  });
-
-var sess = {
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {},
-    store: store
-}
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
-}
-app.use(session(sess));
-
 
 //Index route
 app.use("/", loginViaCookie);
